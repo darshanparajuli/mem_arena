@@ -1,4 +1,4 @@
-use std::alloc::{alloc_zeroed, dealloc, Layout};
+use std::alloc::{alloc_zeroed, dealloc, handle_alloc_error, Layout};
 use std::mem;
 use std::ptr;
 use std::slice;
@@ -27,7 +27,7 @@ impl MemArena {
     pub fn push<'a, T: 'a>(&mut self) -> &'a mut T {
         let size = mem::size_of::<T>();
         if self.offset + size > self.capacity {
-            panic!("out of memory");
+            handle_alloc_error(self.layout);
         }
 
         let result = unsafe { mem::transmute(self.ptr.add(self.offset)) };
@@ -38,7 +38,7 @@ impl MemArena {
     pub fn push_array<'a, T: 'a>(&mut self, count: usize) -> &'a mut [T] {
         let size = mem::size_of::<T>();
         if self.offset + (size * count) > self.capacity {
-            panic!("out of memory");
+            handle_alloc_error(self.layout);
         }
 
         let ptr = self.ptr as *mut T;
