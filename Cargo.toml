@@ -1,0 +1,7 @@
+[package]
+name = "mem_arena"
+version = "0.1.0"
+authors = ["Darshan Parajuli <parajulidarshan@gmail.com>"]
+edition = "2018"
+
+[dependencies]
