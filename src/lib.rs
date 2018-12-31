@@ -1,5 +1,6 @@
 use std::alloc::{alloc_zeroed, dealloc, Layout};
 use std::mem;
+use std::ptr;
 use std::slice;
 
 pub struct MemArena {
@@ -59,12 +60,8 @@ impl MemArena {
     }
 
     pub fn clear(&mut self) {
+        unsafe { ptr::write_bytes(self.ptr, 0, self.capacity) };
         self.offset = 0;
-        for i in 0..self.capacity {
-            unsafe {
-                *self.ptr.add(i) = 0;
-            }
-        }
     }
 
     fn dealloc(&mut self) {
