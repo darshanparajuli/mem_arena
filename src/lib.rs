@@ -60,7 +60,9 @@ impl MemArena {
     }
 
     pub fn clear(&mut self) {
-        unsafe { ptr::write_bytes(self.ptr, 0, self.capacity) };
+        unsafe {
+            ptr::write_bytes(self.ptr, 0, self.capacity);
+        }
         self.offset = 0;
     }
 
